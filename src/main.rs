@@ -1,4 +1,8 @@
+pub mod pages;
+
 use eframe::egui;
+use crate::pages::main_page::MainPage;
+use crate::pages::Page;
 
 fn main() {
     let opcoes_nativas = eframe::NativeOptions::default();
@@ -20,8 +24,9 @@ impl MyEguiApp {
 
 impl eframe::App for MyEguiApp {
    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
+       let mut page = MainPage{};
        egui::CentralPanel::default().show(ctx, |ui| {
-           ui.heading("Hello World!");
+           page.update(ui);
        });
    }
 }
