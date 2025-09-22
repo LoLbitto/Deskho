@@ -1,16 +1,17 @@
 pub mod pages;
+pub mod controllers;
 
 use eframe::egui;
-use crate::pages::main_page::MainPage;
-use crate::pages::Page;
+use crate::controllers::page_controller::PageController;
 
 fn main() {
     let opcoes_nativas = eframe::NativeOptions::default();
     eframe::run_native("Deskho", opcoes_nativas, Box::new(|cc| Ok(Box::new(MyEguiApp::new(cc)))));
 }
 
-#[derive(Default)]
-struct MyEguiApp {}
+struct MyEguiApp {
+    page_controller: PageController,
+}
 
 impl MyEguiApp {
     fn new(cc: &eframe::CreationContext<'_>) -> Self {
@@ -18,15 +19,15 @@ impl MyEguiApp {
         // Restore app state using cc.storage (requires the "persistence" feature).
         // Use the cc.gl (a glow::Context) to create graphics shaders and buffers that you can use
         // for e.g. egui::PaintCallback.
-        Self::default()
+        let page_controller = PageController::new();
+        Self{page_controller}
     }
 }
 
 impl eframe::App for MyEguiApp {
    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
-       let mut page = MainPage{};
        egui::CentralPanel::default().show(ctx, |ui| {
-           page.update(ui);
+           self.page_controller.draw_page(ui);
        });
    }
 }
